@@ -1,0 +1,3 @@
+(library
+ (name kv)
+ (public_name ocaml_kv))
