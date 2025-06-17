@@ -1,0 +1,4 @@
+(executable
+ (name main)
+ (public_name ocaml_kv)
+ (libraries kv unix))
