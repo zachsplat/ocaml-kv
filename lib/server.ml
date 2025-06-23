@@ -8,7 +8,6 @@ let start ~port store =
   Printf.printf "listening on :%d\n%!" port;
   while true do
     let client, _addr = Unix.accept sock in
-    (* just handle inline for now, no threading *)
     handle_client store client
   done
 
@@ -26,11 +25,11 @@ and handle_client store fd =
       flush oc;
       if resp = "" then running := false
   done;
-  Unix.close fd
+  (try Unix.close fd with Unix.Unix_error _ -> ())
 
 and dispatch store = function
-  | Protocol.Set (k, v) ->
-    Store.set store k v;
+  | Protocol.Set (k, v, ttl) ->
+    Store.set ?ttl store k v;
     Protocol.response_ok
   | Protocol.Get k ->
     (match Store.get store k with
@@ -41,4 +40,5 @@ and dispatch store = function
     else "+0\n"
   | Protocol.Ping -> Protocol.response_pong
   | Protocol.Quit -> ""
+  | Protocol.Keys -> Protocol.response_err "not implemented yet"
   | Protocol.Unknown _ -> Protocol.response_err "unknown command"
