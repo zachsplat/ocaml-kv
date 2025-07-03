@@ -13,5 +13,4 @@ let () =
   Kv.Aof.replay aof store;
   Kv.Aof.open_log aof;
   Printf.printf "data dir: %s\n%!" !data_dir;
-  (* TODO: pass aof to server so it can log mutations *)
-  Kv.Server.start ~port:!port store
+  Kv.Server.start ~port:!port ~aof:(Some aof) store
