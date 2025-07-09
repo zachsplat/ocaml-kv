@@ -44,5 +44,12 @@ and dispatch store aof = function
     end else "+0\n"
   | Protocol.Ping -> Protocol.response_pong
   | Protocol.Quit -> ""
-  | Protocol.Keys -> Protocol.response_err "not implemented yet"
+  | Protocol.Keys ->
+    let keys = Store.keys store in
+    let buf = Buffer.create 128 in
+    Buffer.add_string buf (Printf.sprintf "*%d\n" (List.length keys));
+    List.iter (fun k ->
+      Buffer.add_string buf (Printf.sprintf "$%d\n%s\n" (String.length k) k)
+    ) keys;
+    Buffer.contents buf
   | Protocol.Unknown _ -> Protocol.response_err "unknown command"

@@ -22,7 +22,6 @@ let get t key =
   match Hashtbl.find_opt t.data key with
   | Some e when not (is_expired e) -> Some e.value
   | Some _ ->
-    (* lazy cleanup *)
     Hashtbl.remove t.data key;
     t.count <- t.count - 1;
     None
@@ -46,9 +45,13 @@ let del t key =
   end else
     false
 
+let keys t =
+  Hashtbl.fold (fun k e acc ->
+    if is_expired e then acc else k :: acc
+  ) t.data []
+
 let size t = t.count
 
-(* remove all expired keys, called periodically maybe *)
 let gc t =
   let to_remove = Hashtbl.fold (fun k e acc ->
     if is_expired e then k :: acc else acc
