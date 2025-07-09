@@ -2,7 +2,7 @@
 
 embedded key-value store in OCaml. TCP interface, simple get/set/del.
 
-not meant for production, just wanted to see how far I could get
+not meant for production use, just wanted to see how far I could get
 with a straightforward design before needing anything fancy.
 
 ## build
