@@ -1,4 +1,4 @@
-let listen_addr = Unix.inet_addr_loopback
+let listen_addr = Unix.inet_addr_any
 
 let start ~port ?(aof=None) store =
   let sock = Unix.socket Unix.PF_INET Unix.SOCK_STREAM 0 in
