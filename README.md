@@ -24,3 +24,11 @@ SET foo bar
 GET foo
 DEL foo
 ```
+
+## benchmarks
+
+on my machine (nothing scientific):
+- SET: ~500k ops/sec
+- GET: ~800k ops/sec
+
+the bottleneck is probably the hashtable resizing, haven't profiled yet.
